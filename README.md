@@ -42,7 +42,7 @@ The following chapter describes the basic idea behind the selected process.
 5.  The personal advisor will provide the unemployed with the necessary support during the job search in regularly scheduled consultations.
 
 ## TO-BE Digitalized Process
-  
+![](https://github.com/DigiBP/digibp-appenzell/blob/master/ProcessTOBE.PNG)
 
 ## Camunda Processes Step by Step Guide
 
