@@ -60,14 +60,7 @@ The following chapter describes the basic idea behind the selected process.
 3. Based on age, gender and insurance coverage the process defines if the registration is eligible and complete
 4. If the registration is eligible and complete, the unemployed gets an automized notification via email
 5. If the unemployed is not eligible, the process ends here
-3. Registration of personal data. The following documents are required: 
-* An OASI-IV insurance certificate or health insurance card <br>
-* Official piece of personal identification <br>
-* Residence certificate or a residence confirmation from your commune of residence <br>
-* A 'Registration at the commune of residence' form, if initial registration did not take place at a RAV centre <br>
-* Foreign nationals must also produce their permanent residence permit or a foreign national identity card <br>
-4. After this interview the unemployed will be assigned a personal advisor from the Regional Employment Centre. <br>
-5. The personal advisor will provide the unemployed with the necessary support during the job search in regularly scheduled consultations.
+
 
 ### Phases - Status
 
