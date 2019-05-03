@@ -28,6 +28,16 @@ Tasks were tracked within Google Drive and assigned to the team members. Since t
 # Process Description (Application/Registration Unemployment Insurance)
 The following chapter describes the basic idea behind the selected process. 
 
+## Tools and Software
+The following tools and software has been used for implementing the incident management process.
+
+| Tool / Software  | Description |
+| ---------------- | ------------------ |
+| Camunda Modeler  | The Camunda Modeler is used to create BPMN, CMMN and DMN models. The modeler is based on [bpmn.io](http://bpmn.io/).  |
+| GitHub| Github is used for collaboration and versioning of the programming code as well as the models. |
+|Heroku|Heroku is a PaaS (Platform as a Services) which is used to quickly build, run, and operate the Camunda in the cloud. |
+|Zapier|Zapier is a web-based service that allows end users to integrate the web applications.
+
 ## AS-IS Highlevel Process
 1. The unemployed has to report in person to the Regional Employment Centre (REC/RAV) at one of Basel Canton's two locations by no later than the day the person becomes unemployed. REC will provide the unemployed with the necessary forms and informs about how to proceed. 
 * An official form of ID is required - for foreign nationals this would be the residence permit or settlement permit. <br>
