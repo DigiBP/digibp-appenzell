@@ -69,32 +69,27 @@ The following chapter describes the basic idea behind the selected process.
 4. After this interview the unemployed will be assigned a personal advisor from the Regional Employment Centre. <br>
 5. The personal advisor will provide the unemployed with the necessary support during the job search in regularly scheduled consultations.
 
+### Phases - Status
+
+| Phase  | Status |
+| ---------------- | ------------------ |
+| Register new user  | Open  |
+| Elegibility process  | In process  |
+| Elegible no  | Rejected-----> (inform the user and close the case)  |
+| Eligible yes  | Acepted  |
+| Request info to Employee  | Pending (for employer info)  |
+| Assigned to SW to review  | Pending for approval (by the social worker)  |
+| SW review the case  | Approval denied (Inform the user)  |
+| SW review the case  | Approved  |
+|   | Completed  |
+                                                  
+
+
 ## Camunda Processes Step by Step Guide
 
 ## Developer Documentation
 
 ## Integrations & Interfaces
-
-## Tools and Software
-
-The following tools and software has been used for implementing the incident management process.
-
-| Tool / Software  | Description |
-| ---------------- | ------------------ |
-| Camunda Modeler  | The Camunda Modeler is used to create BPMN, CMMN and DMN models. The modeler is based on [bpmn.io](http://bpmn.io/).  |
-| GitHub| Github is used for collaboration and versioning of the programming code as well as the models. |
-|Heroku|Heroku is a PaaS (Platform as a Services) which is used to quickly build, run, and operate the Camunda in the cloud. |
-|Zapier|Zapier is a web-based service that allows end users to integrate the web applications. |
-|Others?|xxxx|
-
-
-
-
-
-
-
-
-
 
 
 
