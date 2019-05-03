@@ -25,7 +25,22 @@ In order to minimalize defects, various functional tests were conducted. The tea
 ## Project Management
 Tasks were tracked within Google Drive and assigned to the team members. Since the team only consisted of five team members, no designated project leader was chosen. Tasks were taken by the each team member individually.
 
-REgoogle form link https://docs.google.com/forms/d/e/1FAIpQLSd4OtjgHhR-bNpov0TNpOeCzjLxJA_8aA0OUY9xv4d1wJtGcA/viewform and fills out the application form. By pressing the send button, it will be sent via Integromat (HTTP) to the digibp herokuapp with all relevant variables. 
+# Process Description (Application/Registration Unemployment Insurance)
+The following chapter describes the basic idea behind the incident process we have selected. 
+
+## AS-IS Highlevel Process
+1. The unemployed has to report in person to the Regional Employment Centre (REC/RAV) at one of Basel Canton's two locations by no later than the day the person becomes unemployed. REC will provide the unemployed with the necessary forms and informs about how to proceed. <br>
+* An official form of ID is required - for foreign nationals this would be the residence permit or settlement permit.
+2.	With the received application, the unemployed will receive an appointment for the recording and registration of his/her personal data. <br>
+3. Registration of personal data. The following documents are required: <br>
+* An OASI-IV insurance certificate or health insurance card <br>
+* Official piece of personal identification <br>
+* Residence certificate or a residence confirmation from your commune of residence <br>
+* A 'Registration at the commune of residence' form, if initial registration did not take place at a RAV centre <br>
+* Foreign nationals must also produce their permanent residence permit or a foreign national identity card <br>
+3.  After this interview the unemployed will be assigned a personal advisor from the Regional Employment Centre.
+4.  The personal advisor will provide the unemployed with the necessary support during the job search in regularly scheduled consultations.
+
 
 
 ## Camunda Processes Step by Step Guide
