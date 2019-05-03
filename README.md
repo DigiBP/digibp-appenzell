@@ -41,7 +41,8 @@ The following chapter describes the basic idea behind the selected process.
 4.  After this interview the unemployed will be assigned a personal advisor from the Regional Employment Centre. <br>
 5.  The personal advisor will provide the unemployed with the necessary support during the job search in regularly scheduled consultations.
 
-
+## TO-BE Digitalized Process
+  
 
 ## Camunda Processes Step by Step Guide
 
