@@ -60,7 +60,12 @@ The following chapter describes the basic idea behind the selected process.
 3. Based on age, gender and insurance coverage the process defines if the registration is eligible and complete
 * If the registration is eligible and complete, the unemployed gets an automized notification via email
 * If the unemployed is not eligible, the process ends here
-4. The former employer 
+4. The former employer receives a request from the Regional Employment Centre (REC/RAV) to provide the details about the employees unemployment
+5. The employer provides the requested details (from step 4) to the Regional Employment Centre (REC/RAV)
+6. The automized process then provides the REC/RAV with a calculation of the proposed unemployment salary - by default this is 80% of the regular salary.
+7. Based on available slots, the next social worker is being assigned
+8. The process sends the available case files and the calculated salary to the assigned social worker
+9. The assigned social worker then reviews the case and starts the actual counseling with the unemployed
 
 ### Phases - Status
 
