@@ -25,7 +25,7 @@ In order to minimalize defects, various functional tests were conducted. The tea
 Tasks were tracked within Google Drive and assigned to the team members. Since the team only consisted of five team members, no designated project leader was chosen. Tasks were taken by the each team member individually.
 
 ## Tools and Software
-The following tools and software has been used for implementing the incident management process.
+The following tools and software has been used for implementing the application/registration process.
 
 | Tool / Software  | Description |
 | ---------------- | ------------------ |
@@ -58,9 +58,9 @@ The following chapter describes the basic idea behind the selected process.
 * For the registration, a valid Social Security Number (AHV) number is required 
 2. The process checks for the latest unemployment date, if any, to determine if the unemployed qualifies for insurance coverage
 3. Based on age, gender and insurance coverage the process defines if the registration is eligible and complete
-4. If the registration is eligible and complete, the unemployed gets an automized notification via email
-5. If the unemployed is not eligible, the process ends here
-
+* If the registration is eligible and complete, the unemployed gets an automized notification via email
+* If the unemployed is not eligible, the process ends here
+4. The former employer 
 
 ### Phases - Status
 
