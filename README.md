@@ -90,7 +90,7 @@ The following chapter describes the basic idea behind the selected process.
 
 ### Integromat Scenarios
 
-| Scenarios  | Camunda Path | Internal Process Yes/No (purple)
+| Scenarios  | Camunda Path | Internal Process Yes/No
 | ---------------- | ------------------ | ------------------ |
 | Calculate proposed salary |  | No |
 | Get Status by CaseId |  | Yes |
