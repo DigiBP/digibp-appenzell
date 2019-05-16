@@ -72,8 +72,8 @@ The following chapter describes the basic idea behind the selected process.
 | Phase  | Status |
 | ---------------- | ------------------ |
 | Register new user  | Open  |
-| Elegibility process  | In process  |
-| Elegible no  | Rejected-----> (inform the user and close the case)  |
+| Eligibility process  | In process  |
+| Eligible no  | Rejected-----> (inform the user and close the case)  |
 | Eligible yes  | Acepted  |
 | Request info to Employee  | Pending (for employer info)  |
 | Assigned to SW to review  | Pending for approval (by the social worker)  |
