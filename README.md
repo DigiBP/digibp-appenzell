@@ -86,7 +86,7 @@ The following chapter describes the basic idea behind the selected process.
 
 ### Overall Architecture
 
-![] (https://github.com/DigiBP/digibp-appenzell/blob/master/overallArichi.JPG)
+![](https://github.com/DigiBP/digibp-appenzell/blob/master/overallArichi.JPG)
 
 ### App Architecture
 
