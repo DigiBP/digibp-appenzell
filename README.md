@@ -90,12 +90,19 @@ The following chapter describes the basic idea behind the selected process.
 
 ### Integromat Scenarios
 
-| Scenarios  | Camunda Path |
-| ---------------- | ------------------ |
-|  |  |
-|  |  |
-|  |  |
-|  |  |
+| Scenarios  | Camunda Path | Internal Process Yes/No (purple)
+| ---------------- | ------------------ | ------------------ |
+| Calculate proposed salary |  | No |
+| Get Status by CaseId |  | Yes |
+| Get user by AHV |  | Yes |
+| Insert Employer |  | No |
+| Insert new case |  | Yes |
+| Insert/Update user |  | Yes |
+| Integration Webhooks, Gmail |  | Yes |
+| Integration Webhooks, PostgreSQL, Tools |  | No |
+| Update case |  | No |
+| Update case status |  | No |
+
 
 ### Integration of Camunda Processes
 
