@@ -100,8 +100,8 @@ The following chapter describes the basic idea behind the selected process.
 | Insert Employer |  | No |
 | Insert new case |  | Yes |
 | Insert/Update user |  | Yes |
-| Integration Webhooks, Gmail |  | Yes |
 | Sent E-mail to employer |  | No |
+| Insert info to database from google form |  | Yes |
 | Update case |  | No |
 | Update case status |  | No |
 
