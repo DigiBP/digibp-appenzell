@@ -90,6 +90,13 @@ The following chapter describes the basic idea behind the selected process.
 
 ### Integromat Scenarios
 
+| Scenarios  | Camunda Path |
+| ---------------- | ------------------ |
+|  |  |
+|  |  |
+|  |  |
+|  |  |
+
 ### Integration of Camunda Processes
 
 
