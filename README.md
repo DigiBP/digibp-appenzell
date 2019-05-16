@@ -87,11 +87,13 @@ The following chapter describes the basic idea behind the selected process.
 
 ## Developer Documentation
 
-## Integrations & Interfaces
+### Overall Architecture
 
+### App Architecture
 
+### Integromat Scenarios
 
-
+## Integration of Camunda Processes
 
 
 
