@@ -82,9 +82,6 @@ The following chapter describes the basic idea behind the selected process.
 |   | Completed  |
                                                   
 
-
-## Camunda Processes Step by Step Guide
-
 ## Developer Documentation
 
 ### Overall Architecture
@@ -93,7 +90,7 @@ The following chapter describes the basic idea behind the selected process.
 
 ### Integromat Scenarios
 
-## Integration of Camunda Processes
+### Integration of Camunda Processes
 
 
 
