@@ -51,7 +51,7 @@ The following chapter describes the basic idea behind the selected process.
 5. The personal advisor will provide the unemployed with the necessary support during the job search in regularly scheduled consultations.
 
 ## TO-BE Digitalized Process
-![](https://github.com/DigiBP/digibp-appenzell/blob/master/ProcessTOBE.PNG)
+![](https://github.com/DigiBP/digibp-appenzell/blob/master/ProcessTobe.PNG)
 
 1. The person affected gets unemployed and reports the state via app to the Regional Employment Centre (REC/RAV).
 2. The unemployed can upload the necessary forms right away
