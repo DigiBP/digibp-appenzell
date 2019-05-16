@@ -101,7 +101,7 @@ The following chapter describes the basic idea behind the selected process.
 | Insert new case |  | Yes |
 | Insert/Update user |  | Yes |
 | Integration Webhooks, Gmail |  | Yes |
-| Integration Webhooks, PostgreSQL, Tools |  | No |
+| Sent E-mail to employer |  | No |
 | Update case |  | No |
 | Update case status |  | No |
 
