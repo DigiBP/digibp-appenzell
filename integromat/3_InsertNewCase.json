@@ -36,11 +36,11 @@
                 "interface": [
                     {
                         "name": "id",
-                        "type": "text"
+                        "type": "number"
                     },
                     {
                         "name": "employerId",
-                        "type": "text"
+                        "type": "number"
                     },
                     {
                         "name": "email",
@@ -72,18 +72,29 @@
                     },
                     {
                         "name": "zip_code",
-                        "type": "text"
+                        "type": "number"
                     },
                     {
                         "name": "city",
                         "type": "text"
                     },
                     {
-                        "name": "country",
+                        "name": "citizenship",
+                        "type": "text"
+                    },
+                    {
+                        "name": "gender",
+                        "type": "text"
+                    },
+                    {
+                        "name": "dateOfUnemployment",
+                        "type": "text"
+                    },
+                    {
+                        "name": "dateOfWorkpermit",
                         "type": "text"
                     }
-                ],
-                "advanced": true
+                ]
             }
         },
         {
@@ -325,7 +336,7 @@
                             },
                             "mapper": {
                                 "qs": [],
-                                "url": "https://appenzell.herokuapp.com/rest/process-definition/Process_0ue3coa:1:c67ab460-8139-11e9-86a7-ca2bcb8246b7/start",
+                                "url": "https://appenzell.herokuapp.com/rest/process-definition/Unemployment_Process_01:25:dbff0b73-8702-11e9-b410-eeb9e98efcf7/start",
                                 "data": "{{16.json}}",
                                 "gzip": true,
                                 "method": "post",

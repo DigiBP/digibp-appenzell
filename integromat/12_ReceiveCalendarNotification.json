@@ -257,18 +257,6 @@
             "parameters": {
                 "handleErrors": false
             },
-            "filter": {
-                "name": "",
-                "conditions": [
-                    [
-                        {
-                            "a": "a{{14.`$1`}}",
-                            "b": "no",
-                            "o": "text:equal"
-                        }
-                    ]
-                ]
-            },
             "mapper": {
                 "qs": [],
                 "url": "https://appenzell.herokuapp.com/rest/message",

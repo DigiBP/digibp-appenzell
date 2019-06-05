@@ -35,11 +35,10 @@
                 ],
                 "interface": [
                     {
-                        "name": "id_case",
+                        "name": "caseId",
                         "type": "number"
                     }
-                ],
-                "advanced": true
+                ]
             }
         },
         {
@@ -66,7 +65,7 @@
                                 "account": 648539
                             },
                             "mapper": {
-                                "@01:integer": "{{7.id_case}}"
+                                "@01:integer": "{{7.caseId}}"
                             },
                             "metadata": {
                                 "designer": {
@@ -130,8 +129,8 @@
                                     "{{get(1.EmployerCheck; \"emp_email\")}}"
                                 ],
                                 "bcc": [],
-                                "html": "Dear {{get(1.EmployerCheck; \"emp_name\")}},\n\n<br>\n\n<br>We received the unemployment registration from\nyour ex-employee.\n\n<br>Case ID: {{7.id_case}}\n\n<br>Employee Name: {{get(1.EmployerCheck; \"firstname\")}} \n{{get(1.EmployerCheck; \"lastname\")}}\n\n<br>AHV Nr: \n{{get(1.EmployerCheck; \"ahv_nr\")}}\n\n<br>To get more information we would request you to\nfill out the employer survey form, link as below.\n\n<br>https://docs.google.com/forms/d/e/1FAIpQLScSoo2s7sBEuugUp06xndNLR0cL0HVv74G_M59xn-dJP5pmag/viewform?usp=sf_link\n\n<br>\n\n<br>Thanks for your coordination.\n\n<br>Best Regards\n\n<br>\n\n<br>RAV Basel\n\n",
-                                "subject": "RAV Unemployment Survey {{7.id_case}} ",
+                                "html": "Dear {{get(1.EmployerCheck; \"emp_name\")}},\n\n<br>\n\n<br>We received the unemployment registration from\nyour ex-employee.\n\n<br>Case ID: {{7.caseId}}\n\n<br>Employee Name: {{get(1.EmployerCheck; \"firstname\")}} \n{{get(1.EmployerCheck; \"lastname\")}}\n\n<br>AHV Nr: \n{{get(1.EmployerCheck; \"ahv_nr\")}}\n\n<br>To get more information we would request you to\nfill out the employer survey form, link as below.\n\n<br>https://docs.google.com/forms/d/e/1FAIpQLScSoo2s7sBEuugUp06xndNLR0cL0HVv74G_M59xn-dJP5pmag/viewform?usp=sf_link\n\n<br>\n\n<br>Thanks for your coordination.\n\n<br>Best Regards\n\n<br>\n\n<br>RAV Basel\n\n",
+                                "subject": "RAV Unemployment Survey {{7.caseId}}",
                                 "attachments": []
                             },
                             "metadata": {

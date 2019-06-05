@@ -113,7 +113,7 @@
                                 "conditions": [
                                     [
                                         {
-                                            "a": "{{1.id_user}}",
+                                            "a": "{{1.id}}",
                                             "b": "",
                                             "o": "notexist"
                                         }
@@ -316,7 +316,7 @@
                                 "conditions": [
                                     [
                                         {
-                                            "a": "{{1.id_user}}",
+                                            "a": "{{1.id}}",
                                             "b": "",
                                             "o": "exist"
                                         }

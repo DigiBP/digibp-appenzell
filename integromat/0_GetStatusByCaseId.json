@@ -12,8 +12,8 @@
             "mapper": {},
             "metadata": {
                 "designer": {
-                    "x": -69,
-                    "y": 143
+                    "x": -17,
+                    "y": 153
                 },
                 "restore": {
                     "hook": {
@@ -51,7 +51,7 @@
                 "account": 648539
             },
             "mapper": {
-                "@01:integer": "{{2.id_case}}"
+                "@01:integer": "{{2.id}}"
             },
             "metadata": {
                 "designer": {

@@ -82,8 +82,7 @@
                         "name": "country",
                         "type": "text"
                     }
-                ],
-                "advanced": true
+                ]
             }
         },
         {

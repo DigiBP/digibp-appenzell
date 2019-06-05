@@ -111,10 +111,12 @@
             },
             "mapper": {
                 "cc": [],
-                "to": [],
+                "to": [
+                    "stefan.eggenschwiler@students.fhnw.ch"
+                ],
                 "bcc": [],
-                "html": "",
-                "subject": "",
+                "html": "Hello,<br><br>\n\nYou have a new case to review:<br><br><br>\n\n<td style=\"border-left: solid 1px #e9e9e9;>id_case: {{get(2.AggCase; \"id_case\")}}<br>\nDate of Unemployment: {{get(2.AggCase; \"date_of_unemployment\")}}<br>\nReason of Unemployment: {{get(2.AggCase; \"reason_of_unemployment\")}}<br>\nBrutto Salary: {{get(2.AggCase; \"brutto_salary\")}}<br>\nDuration of Employment: {{get(2.AggCase; \"duration_of_employment\")}}<br>\nWorkload: {{get(2.AggCase; \"workload\")}}%<br><br></td>\n\nPlease review the case as soon as possible.<br>\nLet's create make new workforce!",
+                "subject": "[RAV-Basel] New Case Assignment",
                 "attachments": []
             },
             "metadata": {
@@ -129,7 +131,9 @@
                     },
                     "to": {
                         "mode": "chose",
-                        "items": []
+                        "items": [
+                            "undefined"
+                        ]
                     },
                     "bcc": {
                         "mode": "chose",
