@@ -1,0 +1,122 @@
+{
+    "name": "Assign Social Worker",
+    "flow": [
+        {
+            "id": 1,
+            "module": "gateway:CustomWebHook",
+            "version": 1,
+            "parameters": {
+                "hook": 172519,
+                "maxResults": 2
+            },
+            "mapper": {},
+            "metadata": {
+                "designer": {
+                    "x": 0,
+                    "y": 0
+                },
+                "restore": {
+                    "hook": {
+                        "label": "Assign_SW"
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "hook",
+                        "type": "hook",
+                        "label": "Webhook",
+                        "required": true
+                    },
+                    {
+                        "name": "maxResults",
+                        "type": "number",
+                        "label": "Maximum number of results"
+                    }
+                ],
+                "interface": [
+                    {
+                        "name": "caseId",
+                        "type": "number"
+                    }
+                ]
+            }
+        },
+        {
+            "id": 2,
+            "module": "postgres:StoredProcedure",
+            "version": 2,
+            "parameters": {
+                "ignore": false,
+                "spname": "\"unemployment_service\".\"AssignSW\"",
+                "account": 648539
+            },
+            "mapper": {
+                "@01:integer": "{{1.caseId}}"
+            },
+            "metadata": {
+                "designer": {
+                    "x": 300,
+                    "y": 0
+                },
+                "restore": {
+                    "spname": {
+                        "label": "unemployment_service.AssignSW"
+                    },
+                    "account": {
+                        "label": "My PostgreSQL connection"
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "account",
+                        "type": "account",
+                        "label": "Connection",
+                        "required": true
+                    },
+                    {
+                        "name": "ignore",
+                        "type": "boolean",
+                        "label": "Ignore returned data",
+                        "required": true
+                    },
+                    {
+                        "name": "spname",
+                        "type": "select",
+                        "label": "Function",
+                        "required": true
+                    }
+                ],
+                "expect": [
+                    {
+                        "name": "@01:integer",
+                        "type": "integer",
+                        "label": "_id_case"
+                    }
+                ],
+                "interface": [
+                    {
+                        "name": "AssignSW",
+                        "type": "text",
+                        "label": "AssignSW"
+                    }
+                ]
+            }
+        }
+    ],
+    "metadata": {
+        "version": 1,
+        "scenario": {
+            "roundtrips": 1,
+            "maxErrors": 3,
+            "autoCommit": false,
+            "sequential": false,
+            "confidential": false,
+            "dataloss": false,
+            "dlq": false
+        },
+        "designer": {
+            "orphans": []
+        },
+        "zone": "eu1.integromat.com"
+    }
+}

@@ -1,0 +1,551 @@
+{
+    "name": "Receive Calendar Notification",
+    "flow": [
+        {
+            "id": 11,
+            "module": "google-email:TriggerNewEmail",
+            "version": 1,
+            "parameters": {
+                "from": null,
+                "text": "",
+                "folder": "INBOX",
+                "account": 651769,
+                "subject": "",
+                "criteria": "UNSEEN",
+                "markSeen": true,
+                "maxResults": 2,
+                "searchType": "simple"
+            },
+            "mapper": {},
+            "metadata": {
+                "designer": {
+                    "x": -628,
+                    "y": -4
+                },
+                "restore": {
+                    "folder": {
+                        "path": [
+                            "Inbox"
+                        ]
+                    },
+                    "account": {
+                        "label": "My Google connection (info.ravbasel@gmail.com)"
+                    },
+                    "criteria": {
+                        "label": "Only Unread emails"
+                    },
+                    "searchType": {
+                        "label": "Simple filter"
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "account",
+                        "type": "account",
+                        "label": "Connection",
+                        "required": true
+                    },
+                    {
+                        "name": "searchType",
+                        "type": "select",
+                        "label": "Filter type",
+                        "required": true,
+                        "validate": {
+                            "enum": [
+                                "simple",
+                                "gmail"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "markSeen",
+                        "type": "boolean",
+                        "label": "Mark email message(s) as read when fetched"
+                    },
+                    {
+                        "name": "maxResults",
+                        "type": "uinteger",
+                        "label": "Maximum number of results"
+                    },
+                    {
+                        "name": "criteria",
+                        "type": "select",
+                        "label": "Criteria",
+                        "required": true,
+                        "validate": {
+                            "enum": [
+                                "ALL",
+                                "SEEN",
+                                "UNSEEN"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "from",
+                        "type": "email",
+                        "label": "Sender email address"
+                    },
+                    {
+                        "name": "subject",
+                        "type": "text",
+                        "label": "Subject"
+                    },
+                    {
+                        "name": "text",
+                        "type": "text",
+                        "label": "Search phrase"
+                    },
+                    {
+                        "name": "folder",
+                        "type": "folder",
+                        "label": "Folder",
+                        "required": true
+                    }
+                ]
+            }
+        },
+        {
+            "id": 16,
+            "module": "postgres:StoredProcedure",
+            "version": 2,
+            "parameters": {
+                "ignore": false,
+                "spname": "\"unemployment_service\".\"GetCaseIdByUserMail\"",
+                "account": 648539
+            },
+            "filter": {
+                "name": "Filter Non-Calendar Emails",
+                "conditions": [
+                    [
+                        {
+                            "a": "{{11.subject}}",
+                            "b": "accepted:",
+                            "o": "text:startwith"
+                        }
+                    ],
+                    [
+                        {
+                            "a": "{{11.subject}}",
+                            "b": "Angenommen:",
+                            "o": "text:startwith"
+                        }
+                    ]
+                ]
+            },
+            "mapper": {
+                "@01:character varying": "{{11.from.address}}"
+            },
+            "metadata": {
+                "designer": {
+                    "x": -286,
+                    "y": -8
+                },
+                "restore": {
+                    "spname": {
+                        "label": "unemployment_service.GetCaseIdByUserMail"
+                    },
+                    "account": {
+                        "label": "My PostgreSQL connection"
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "account",
+                        "type": "account",
+                        "label": "Connection",
+                        "required": true
+                    },
+                    {
+                        "name": "ignore",
+                        "type": "boolean",
+                        "label": "Ignore returned data",
+                        "required": true
+                    },
+                    {
+                        "name": "spname",
+                        "type": "select",
+                        "label": "Function",
+                        "required": true
+                    }
+                ],
+                "expect": [
+                    {
+                        "name": "@01:character varying",
+                        "type": "text",
+                        "label": "_email"
+                    }
+                ],
+                "interface": [
+                    {
+                        "name": "GetCaseIdByUserMail",
+                        "type": "text",
+                        "label": "GetCaseIdByUserMail"
+                    }
+                ]
+            }
+        },
+        {
+            "id": 17,
+            "module": "json:CreateJSON",
+            "version": 1,
+            "parameters": {
+                "type": 59661
+            },
+            "mapper": {
+                "messageName": "Message_ReceiveConfirmation",
+                "correlationKeys": {
+                    "caseId": {
+                        "type": "long",
+                        "value": "{{get(16.GetCaseIdByUserMail; \"id_case\")}}"
+                    }
+                }
+            },
+            "metadata": {
+                "designer": {
+                    "x": 9,
+                    "y": -11
+                },
+                "restore": {
+                    "type": {
+                        "label": "message-receive-information"
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "type",
+                        "type": "udt",
+                        "label": "Data structure",
+                        "required": true
+                    }
+                ],
+                "expect": [
+                    {
+                        "name": "messageName",
+                        "type": "text"
+                    },
+                    {
+                        "name": "correlationKeys",
+                        "spec": [
+                            {
+                                "name": "caseId",
+                                "spec": [
+                                    {
+                                        "name": "value",
+                                        "type": "number",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "type",
+                                        "type": "text",
+                                        "multiline": false
+                                    }
+                                ],
+                                "type": "collection",
+                                "label": "caseId"
+                            }
+                        ],
+                        "type": "collection",
+                        "label": "correlationKeys"
+                    }
+                ]
+            }
+        },
+        {
+            "id": 10,
+            "module": "http:ActionSendData",
+            "version": 3,
+            "parameters": {
+                "handleErrors": false
+            },
+            "filter": {
+                "name": "",
+                "conditions": [
+                    [
+                        {
+                            "a": "a{{14.`$1`}}",
+                            "b": "no",
+                            "o": "text:equal"
+                        }
+                    ]
+                ]
+            },
+            "mapper": {
+                "qs": [],
+                "url": "https://appenzell.herokuapp.com/rest/message",
+                "data": "{{17.json}}",
+                "gzip": true,
+                "method": "post",
+                "headers": [],
+                "timeout": "",
+                "authPass": "",
+                "authUser": "",
+                "bodyType": "raw",
+                "contentType": "application/json",
+                "shareCookies": false,
+                "followRedirect": true,
+                "useQuerystring": false,
+                "rejectUnauthorized": true
+            },
+            "metadata": {
+                "designer": {
+                    "x": 307,
+                    "y": -13
+                },
+                "restore": {
+                    "qs": {
+                        "mode": "chose",
+                        "items": []
+                    },
+                    "method": {
+                        "mode": "chose",
+                        "label": "POST"
+                    },
+                    "headers": {
+                        "mode": "chose",
+                        "items": []
+                    },
+                    "bodyType": {
+                        "label": "Raw"
+                    },
+                    "contentType": {
+                        "label": "JSON (application/json)"
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "handleErrors",
+                        "type": "boolean",
+                        "label": "Evaluate all states as errors (except for 2xx and 3xx )",
+                        "required": true
+                    }
+                ],
+                "expect": [
+                    {
+                        "name": "url",
+                        "type": "url",
+                        "label": "URL",
+                        "required": true
+                    },
+                    {
+                        "name": "method",
+                        "type": "select",
+                        "label": "Method",
+                        "required": true,
+                        "validate": {
+                            "enum": [
+                                "get",
+                                "head",
+                                "post",
+                                "put",
+                                "patch",
+                                "delete"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "qs",
+                        "spec": [
+                            {
+                                "name": "name",
+                                "type": "text",
+                                "label": "Name",
+                                "required": true
+                            },
+                            {
+                                "name": "value",
+                                "type": "text",
+                                "label": "Value"
+                            }
+                        ],
+                        "type": "array",
+                        "label": "Query String",
+                        "labels": {
+                            "add": "Add parameter",
+                            "edit": "Edit parameter"
+                        }
+                    },
+                    {
+                        "name": "headers",
+                        "spec": [
+                            {
+                                "name": "name",
+                                "type": "text",
+                                "label": "Name",
+                                "required": true
+                            },
+                            {
+                                "name": "value",
+                                "type": "text",
+                                "label": "Value"
+                            }
+                        ],
+                        "type": "array",
+                        "label": "Headers",
+                        "labels": {
+                            "add": "Add a header",
+                            "edit": "Edit a header"
+                        }
+                    },
+                    {
+                        "name": "authUser",
+                        "type": "text",
+                        "label": "User name"
+                    },
+                    {
+                        "name": "authPass",
+                        "type": "password",
+                        "label": "Password"
+                    },
+                    {
+                        "name": "timeout",
+                        "type": "uinteger",
+                        "label": "Timeout",
+                        "validate": {
+                            "max": 300,
+                            "min": 1
+                        }
+                    },
+                    {
+                        "name": "shareCookies",
+                        "type": "boolean",
+                        "label": "Share cookies with other HTTP modules",
+                        "required": true
+                    },
+                    {
+                        "name": "rejectUnauthorized",
+                        "type": "boolean",
+                        "label": "Reject connections that are using unverified (self-signed) certificates",
+                        "required": true
+                    },
+                    {
+                        "name": "followRedirect",
+                        "type": "boolean",
+                        "label": "Follow redirect",
+                        "required": true
+                    },
+                    {
+                        "name": "useQuerystring",
+                        "type": "boolean",
+                        "label": "Disable serialization of multiple same query string keys as arrays",
+                        "required": true
+                    },
+                    {
+                        "name": "gzip",
+                        "type": "boolean",
+                        "label": "Request compressed content",
+                        "required": true
+                    },
+                    {
+                        "name": "bodyType",
+                        "type": "select",
+                        "label": "Body type",
+                        "validate": {
+                            "enum": [
+                                "raw",
+                                "x_www_form_urlencoded",
+                                "multipart_form_data"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "contentType",
+                        "type": "select",
+                        "label": "Content type",
+                        "validate": {
+                            "enum": [
+                                "text/plain",
+                                "application/json",
+                                "application/xml",
+                                "text/xml",
+                                "text/html",
+                                "custom"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "data",
+                        "type": "buffer",
+                        "label": "Request content"
+                    }
+                ]
+            }
+        },
+        {
+            "id": 18,
+            "module": "postgres:StoredProcedure",
+            "version": 2,
+            "parameters": {
+                "ignore": false,
+                "spname": "\"unemployment_service\".\"UpdateCaseStatus\"",
+                "account": 648539
+            },
+            "mapper": {
+                "@01:integer": "{{get(16.GetCaseIdByUserMail; \"id_case\")}}",
+                "@02:character": "completed"
+            },
+            "metadata": {
+                "designer": {
+                    "x": 603,
+                    "y": -16
+                },
+                "restore": {
+                    "spname": {
+                        "label": "unemployment_service.UpdateCaseStatus"
+                    },
+                    "account": {
+                        "label": "My PostgreSQL connection"
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "account",
+                        "type": "account",
+                        "label": "Connection",
+                        "required": true
+                    },
+                    {
+                        "name": "ignore",
+                        "type": "boolean",
+                        "label": "Ignore returned data",
+                        "required": true
+                    },
+                    {
+                        "name": "spname",
+                        "type": "select",
+                        "label": "Function",
+                        "required": true
+                    }
+                ],
+                "expect": [
+                    {
+                        "name": "@01:integer",
+                        "type": "integer",
+                        "label": "_id_case"
+                    },
+                    {
+                        "name": "@02:character",
+                        "type": "text",
+                        "label": "_status"
+                    }
+                ],
+                "interface": []
+            }
+        }
+    ],
+    "metadata": {
+        "version": 1,
+        "scenario": {
+            "roundtrips": 1,
+            "maxErrors": 3,
+            "autoCommit": false,
+            "sequential": false,
+            "confidential": false,
+            "dataloss": false,
+            "dlq": false
+        },
+        "designer": {
+            "orphans": []
+        },
+        "zone": "eu1.integromat.com"
+    }
+}

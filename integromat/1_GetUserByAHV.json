@@ -1,0 +1,353 @@
+{
+    "name": "Get User by AHV",
+    "flow": [
+        {
+            "id": 1,
+            "module": "gateway:CustomWebHook",
+            "version": 1,
+            "parameters": {
+                "hook": 161866,
+                "maxResults": 2
+            },
+            "mapper": {},
+            "metadata": {
+                "designer": {
+                    "x": -77,
+                    "y": -38
+                },
+                "restore": {
+                    "hook": {
+                        "label": "Get user by AHV"
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "hook",
+                        "type": "hook",
+                        "label": "Webhook",
+                        "required": true
+                    },
+                    {
+                        "name": "maxResults",
+                        "type": "number",
+                        "label": "Maximum number of results"
+                    }
+                ],
+                "interface": [
+                    {
+                        "name": "id",
+                        "type": "text"
+                    },
+                    {
+                        "name": "employerId",
+                        "type": "text"
+                    },
+                    {
+                        "name": "email",
+                        "type": "text"
+                    },
+                    {
+                        "name": "phone",
+                        "type": "text"
+                    },
+                    {
+                        "name": "firstname",
+                        "type": "text"
+                    },
+                    {
+                        "name": "lastname",
+                        "type": "text"
+                    },
+                    {
+                        "name": "birthDate",
+                        "type": "text"
+                    },
+                    {
+                        "name": "ahv_nr",
+                        "type": "text"
+                    },
+                    {
+                        "name": "address",
+                        "type": "text"
+                    },
+                    {
+                        "name": "zip_code",
+                        "type": "text"
+                    },
+                    {
+                        "name": "city",
+                        "type": "text"
+                    },
+                    {
+                        "name": "country",
+                        "type": "text"
+                    }
+                ],
+                "advanced": true
+            }
+        },
+        {
+            "id": 3,
+            "module": "postgres:StoredProcedure",
+            "version": 2,
+            "parameters": {
+                "ignore": false,
+                "spname": "\"unemployment_service\".\"GetUserByAHV\"",
+                "account": 648539
+            },
+            "mapper": {
+                "@01:character varying": "{{1.ahv_nr}}"
+            },
+            "metadata": {
+                "designer": {
+                    "x": 355,
+                    "y": -34
+                },
+                "restore": {
+                    "spname": {
+                        "label": "unemployment_service.GetUserByAHV"
+                    },
+                    "account": {
+                        "label": "My PostgreSQL connection"
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "account",
+                        "type": "account",
+                        "label": "Connection",
+                        "required": true
+                    },
+                    {
+                        "name": "ignore",
+                        "type": "boolean",
+                        "label": "Ignore returned data",
+                        "required": true
+                    },
+                    {
+                        "name": "spname",
+                        "type": "select",
+                        "label": "Function",
+                        "required": true
+                    }
+                ],
+                "expect": [
+                    {
+                        "name": "@01:character varying",
+                        "type": "text",
+                        "label": "_ahv_nr"
+                    }
+                ],
+                "interface": [
+                    {
+                        "name": "GetUserByAHV",
+                        "type": "text",
+                        "label": "GetUserByAHV"
+                    }
+                ]
+            }
+        },
+        {
+            "id": 4,
+            "module": "builtin:BasicRouter",
+            "version": 1,
+            "mapper": null,
+            "metadata": {
+                "designer": {
+                    "x": 850,
+                    "y": -32
+                }
+            },
+            "routes": [
+                {
+                    "flow": [
+                        {
+                            "id": 5,
+                            "module": "gateway:WebhookRespond",
+                            "version": 1,
+                            "parameters": {},
+                            "filter": {
+                                "name": "AHV no. found",
+                                "conditions": [
+                                    [
+                                        {
+                                            "a": "{{3.GetUserByAHV}}",
+                                            "b": "",
+                                            "o": "exist"
+                                        }
+                                    ]
+                                ]
+                            },
+                            "mapper": {
+                                "body": "{{3.GetUserByAHV}}",
+                                "status": "302",
+                                "headers": [
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json"
+                                    }
+                                ]
+                            },
+                            "metadata": {
+                                "designer": {
+                                    "x": 1150,
+                                    "y": -332
+                                },
+                                "restore": {
+                                    "headers": {
+                                        "items": [
+                                            "undefined"
+                                        ]
+                                    }
+                                },
+                                "expect": [
+                                    {
+                                        "name": "status",
+                                        "type": "uinteger",
+                                        "label": "Status",
+                                        "required": true,
+                                        "validate": {
+                                            "min": 100
+                                        }
+                                    },
+                                    {
+                                        "name": "body",
+                                        "type": "any",
+                                        "label": "Body"
+                                    },
+                                    {
+                                        "name": "headers",
+                                        "spec": [
+                                            {
+                                                "name": "key",
+                                                "type": "text",
+                                                "label": "Key",
+                                                "required": true,
+                                                "validate": {
+                                                    "max": 256
+                                                }
+                                            },
+                                            {
+                                                "name": "value",
+                                                "type": "text",
+                                                "label": "Value",
+                                                "required": true,
+                                                "validate": {
+                                                    "max": 4096
+                                                }
+                                            }
+                                        ],
+                                        "type": "array",
+                                        "label": "Custom headers",
+                                        "validate": {
+                                            "maxItems": 16
+                                        }
+                                    }
+                                ],
+                                "advanced": true
+                            }
+                        }
+                    ]
+                },
+                {
+                    "flow": [
+                        {
+                            "id": 6,
+                            "module": "gateway:WebhookRespond",
+                            "version": 1,
+                            "parameters": {},
+                            "filter": {
+                                "name": "AHV no. not found",
+                                "conditions": [
+                                    [
+                                        {
+                                            "a": "{{3.GetUserByAHV}}",
+                                            "b": "",
+                                            "o": "notexist"
+                                        }
+                                    ]
+                                ]
+                            },
+                            "mapper": {
+                                "body": "Not Found",
+                                "status": "404",
+                                "headers": []
+                            },
+                            "metadata": {
+                                "designer": {
+                                    "x": 1142,
+                                    "y": 185
+                                },
+                                "restore": {
+                                    "headers": {
+                                        "items": []
+                                    }
+                                },
+                                "expect": [
+                                    {
+                                        "name": "status",
+                                        "type": "uinteger",
+                                        "label": "Status",
+                                        "required": true,
+                                        "validate": {
+                                            "min": 100
+                                        }
+                                    },
+                                    {
+                                        "name": "body",
+                                        "type": "any",
+                                        "label": "Body"
+                                    },
+                                    {
+                                        "name": "headers",
+                                        "spec": [
+                                            {
+                                                "name": "key",
+                                                "type": "text",
+                                                "label": "Key",
+                                                "required": true,
+                                                "validate": {
+                                                    "max": 256
+                                                }
+                                            },
+                                            {
+                                                "name": "value",
+                                                "type": "text",
+                                                "label": "Value",
+                                                "required": true,
+                                                "validate": {
+                                                    "max": 4096
+                                                }
+                                            }
+                                        ],
+                                        "type": "array",
+                                        "label": "Custom headers",
+                                        "validate": {
+                                            "maxItems": 16
+                                        }
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "metadata": {
+        "version": 1,
+        "scenario": {
+            "roundtrips": 1,
+            "maxErrors": 3,
+            "autoCommit": false,
+            "sequential": false,
+            "confidential": false,
+            "dataloss": false,
+            "dlq": false
+        },
+        "designer": {
+            "orphans": []
+        },
+        "zone": "eu1.integromat.com"
+    }
+}

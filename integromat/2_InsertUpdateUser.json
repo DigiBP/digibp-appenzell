@@ -1,0 +1,525 @@
+{
+    "name": "Insert or Update User",
+    "flow": [
+        {
+            "id": 1,
+            "module": "gateway:CustomWebHook",
+            "version": 1,
+            "parameters": {
+                "hook": 162124,
+                "maxResults": 2
+            },
+            "mapper": {},
+            "metadata": {
+                "designer": {
+                    "x": 0,
+                    "y": 150
+                },
+                "restore": {
+                    "hook": {
+                        "label": "Insert/update new user"
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "hook",
+                        "type": "hook",
+                        "label": "Webhook",
+                        "required": true
+                    },
+                    {
+                        "name": "maxResults",
+                        "type": "number",
+                        "label": "Maximum number of results"
+                    }
+                ],
+                "interface": [
+                    {
+                        "name": "id",
+                        "type": "text"
+                    },
+                    {
+                        "name": "employerId",
+                        "type": "text"
+                    },
+                    {
+                        "name": "email",
+                        "type": "text"
+                    },
+                    {
+                        "name": "phone",
+                        "type": "text"
+                    },
+                    {
+                        "name": "firstname",
+                        "type": "text"
+                    },
+                    {
+                        "name": "lastname",
+                        "type": "text"
+                    },
+                    {
+                        "name": "birthDate",
+                        "type": "text"
+                    },
+                    {
+                        "name": "ahv_nr",
+                        "type": "text"
+                    },
+                    {
+                        "name": "address",
+                        "type": "text"
+                    },
+                    {
+                        "name": "zip_code",
+                        "type": "text"
+                    },
+                    {
+                        "name": "city",
+                        "type": "text"
+                    },
+                    {
+                        "name": "country",
+                        "type": "text"
+                    }
+                ]
+            }
+        },
+        {
+            "id": 4,
+            "module": "builtin:BasicRouter",
+            "version": 1,
+            "mapper": null,
+            "metadata": {
+                "designer": {
+                    "x": 300,
+                    "y": 150
+                }
+            },
+            "routes": [
+                {
+                    "flow": [
+                        {
+                            "id": 3,
+                            "module": "postgres:StoredProcedure",
+                            "version": 2,
+                            "parameters": {
+                                "ignore": false,
+                                "spname": "\"unemployment_service\".\"InsertUser\"",
+                                "account": 648539
+                            },
+                            "filter": {
+                                "name": "id not found",
+                                "conditions": [
+                                    [
+                                        {
+                                            "a": "{{1.id_user}}",
+                                            "b": "",
+                                            "o": "notexist"
+                                        }
+                                    ]
+                                ]
+                            },
+                            "mapper": {
+                                "@03:date": "{{1.birthDate}}",
+                                "@06:integer": "{{1.zip_code}}",
+                                "@01:character varying": "{{1.firstname}}",
+                                "@02:character varying": "{{1.lastname}}",
+                                "@04:character varying": "{{1.ahv_nr}}",
+                                "@05:character varying": "{{1.address}}",
+                                "@07:character varying": "{{1.city}}",
+                                "@08:character varying": "{{1.citizenship}}",
+                                "@09:character varying": "{{1.email}}",
+                                "@10:character varying": "{{1.phone}}",
+                                "@11:character varying": "{{1.gender}}"
+                            },
+                            "metadata": {
+                                "designer": {
+                                    "x": 600,
+                                    "y": 0
+                                },
+                                "restore": {
+                                    "spname": {
+                                        "label": "unemployment_service.InsertUser"
+                                    },
+                                    "account": {
+                                        "label": "My PostgreSQL connection"
+                                    }
+                                },
+                                "parameters": [
+                                    {
+                                        "name": "account",
+                                        "type": "account",
+                                        "label": "Connection",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "ignore",
+                                        "type": "boolean",
+                                        "label": "Ignore returned data",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "spname",
+                                        "type": "select",
+                                        "label": "Function",
+                                        "required": true
+                                    }
+                                ],
+                                "expect": [
+                                    {
+                                        "name": "@01:character varying",
+                                        "type": "text",
+                                        "label": "_firstname"
+                                    },
+                                    {
+                                        "name": "@02:character varying",
+                                        "type": "text",
+                                        "label": "_lastname"
+                                    },
+                                    {
+                                        "name": "@03:date",
+                                        "type": "date",
+                                        "label": "_birthdate"
+                                    },
+                                    {
+                                        "name": "@04:character varying",
+                                        "type": "text",
+                                        "label": "_ahv_nr"
+                                    },
+                                    {
+                                        "name": "@05:character varying",
+                                        "type": "text",
+                                        "label": "_address"
+                                    },
+                                    {
+                                        "name": "@06:integer",
+                                        "type": "integer",
+                                        "label": "_zip_code"
+                                    },
+                                    {
+                                        "name": "@07:character varying",
+                                        "type": "text",
+                                        "label": "_city"
+                                    },
+                                    {
+                                        "name": "@08:character varying",
+                                        "type": "text",
+                                        "label": "_citizenship"
+                                    },
+                                    {
+                                        "name": "@09:character varying",
+                                        "type": "text",
+                                        "label": "_email"
+                                    },
+                                    {
+                                        "name": "@10:character varying",
+                                        "type": "text",
+                                        "label": "_phone"
+                                    },
+                                    {
+                                        "name": "@11:character varying",
+                                        "type": "text",
+                                        "label": "_gender"
+                                    }
+                                ],
+                                "interface": [
+                                    {
+                                        "name": "InsertUser",
+                                        "type": "integer",
+                                        "label": "InsertUser"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "id": 7,
+                            "module": "gateway:WebhookRespond",
+                            "version": 1,
+                            "parameters": {},
+                            "mapper": {
+                                "body": "{{3.InsertUser}}",
+                                "status": "201",
+                                "headers": []
+                            },
+                            "metadata": {
+                                "designer": {
+                                    "x": 900,
+                                    "y": 0
+                                },
+                                "restore": {
+                                    "headers": {
+                                        "items": []
+                                    }
+                                },
+                                "expect": [
+                                    {
+                                        "name": "status",
+                                        "type": "uinteger",
+                                        "label": "Status",
+                                        "required": true,
+                                        "validate": {
+                                            "min": 100
+                                        }
+                                    },
+                                    {
+                                        "name": "body",
+                                        "type": "any",
+                                        "label": "Body"
+                                    },
+                                    {
+                                        "name": "headers",
+                                        "spec": [
+                                            {
+                                                "name": "key",
+                                                "type": "text",
+                                                "label": "Key",
+                                                "required": true,
+                                                "validate": {
+                                                    "max": 256
+                                                }
+                                            },
+                                            {
+                                                "name": "value",
+                                                "type": "text",
+                                                "label": "Value",
+                                                "required": true,
+                                                "validate": {
+                                                    "max": 4096
+                                                }
+                                            }
+                                        ],
+                                        "type": "array",
+                                        "label": "Custom headers",
+                                        "validate": {
+                                            "maxItems": 16
+                                        }
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                },
+                {
+                    "flow": [
+                        {
+                            "id": 5,
+                            "module": "postgres:StoredProcedure",
+                            "version": 2,
+                            "parameters": {
+                                "ignore": false,
+                                "spname": "\"unemployment_service\".\"UpdateUser\"",
+                                "account": 648539
+                            },
+                            "filter": {
+                                "name": "id found",
+                                "conditions": [
+                                    [
+                                        {
+                                            "a": "{{1.id_user}}",
+                                            "b": "",
+                                            "o": "exist"
+                                        }
+                                    ]
+                                ]
+                            },
+                            "mapper": {
+                                "@04:date": "{{1.birthDate}}",
+                                "@01:integer": "{{1.id_user}}",
+                                "@07:integer": "{{1.zip_code}}",
+                                "@02:character varying": "{{1.firstname}}",
+                                "@03:character varying": "{{1.lastname}}",
+                                "@05:character varying": "{{1.ahv_nr}}",
+                                "@06:character varying": "{{1.address}}",
+                                "@08:character varying": "{{1.city}}",
+                                "@09:character varying": "{{1.citizenship}}",
+                                "@10:character varying": "{{1.email}}",
+                                "@11:character varying": "{{1.phone}}",
+                                "@12:character varying": "{{1.gender}}"
+                            },
+                            "metadata": {
+                                "designer": {
+                                    "x": 600,
+                                    "y": 300
+                                },
+                                "restore": {
+                                    "spname": {
+                                        "label": "unemployment_service.UpdateUser"
+                                    },
+                                    "account": {
+                                        "label": "My PostgreSQL connection"
+                                    }
+                                },
+                                "parameters": [
+                                    {
+                                        "name": "account",
+                                        "type": "account",
+                                        "label": "Connection",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "ignore",
+                                        "type": "boolean",
+                                        "label": "Ignore returned data",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "spname",
+                                        "type": "select",
+                                        "label": "Function",
+                                        "required": true
+                                    }
+                                ],
+                                "expect": [
+                                    {
+                                        "name": "@01:integer",
+                                        "type": "integer",
+                                        "label": "_id"
+                                    },
+                                    {
+                                        "name": "@02:character varying",
+                                        "type": "text",
+                                        "label": "_firstname"
+                                    },
+                                    {
+                                        "name": "@03:character varying",
+                                        "type": "text",
+                                        "label": "_lastname"
+                                    },
+                                    {
+                                        "name": "@04:date",
+                                        "type": "date",
+                                        "label": "_birthdate"
+                                    },
+                                    {
+                                        "name": "@05:character varying",
+                                        "type": "text",
+                                        "label": "_ahv_nr"
+                                    },
+                                    {
+                                        "name": "@06:character varying",
+                                        "type": "text",
+                                        "label": "_address"
+                                    },
+                                    {
+                                        "name": "@07:integer",
+                                        "type": "integer",
+                                        "label": "_zip_code"
+                                    },
+                                    {
+                                        "name": "@08:character varying",
+                                        "type": "text",
+                                        "label": "_city"
+                                    },
+                                    {
+                                        "name": "@09:character varying",
+                                        "type": "text",
+                                        "label": "_citizenship"
+                                    },
+                                    {
+                                        "name": "@10:character varying",
+                                        "type": "text",
+                                        "label": "_email"
+                                    },
+                                    {
+                                        "name": "@11:character varying",
+                                        "type": "text",
+                                        "label": "_phone"
+                                    },
+                                    {
+                                        "name": "@12:character varying",
+                                        "type": "text",
+                                        "label": "_gender"
+                                    }
+                                ],
+                                "interface": []
+                            }
+                        },
+                        {
+                            "id": 8,
+                            "module": "gateway:WebhookRespond",
+                            "version": 1,
+                            "parameters": {},
+                            "mapper": {
+                                "body": "User updated!",
+                                "status": "200",
+                                "headers": []
+                            },
+                            "metadata": {
+                                "designer": {
+                                    "x": 900,
+                                    "y": 300
+                                },
+                                "restore": {
+                                    "headers": {
+                                        "items": []
+                                    }
+                                },
+                                "expect": [
+                                    {
+                                        "name": "status",
+                                        "type": "uinteger",
+                                        "label": "Status",
+                                        "required": true,
+                                        "validate": {
+                                            "min": 100
+                                        }
+                                    },
+                                    {
+                                        "name": "body",
+                                        "type": "any",
+                                        "label": "Body"
+                                    },
+                                    {
+                                        "name": "headers",
+                                        "spec": [
+                                            {
+                                                "name": "key",
+                                                "type": "text",
+                                                "label": "Key",
+                                                "required": true,
+                                                "validate": {
+                                                    "max": 256
+                                                }
+                                            },
+                                            {
+                                                "name": "value",
+                                                "type": "text",
+                                                "label": "Value",
+                                                "required": true,
+                                                "validate": {
+                                                    "max": 4096
+                                                }
+                                            }
+                                        ],
+                                        "type": "array",
+                                        "label": "Custom headers",
+                                        "validate": {
+                                            "maxItems": 16
+                                        }
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "metadata": {
+        "version": 1,
+        "scenario": {
+            "roundtrips": 1,
+            "maxErrors": 3,
+            "autoCommit": false,
+            "sequential": false,
+            "confidential": false,
+            "dataloss": false,
+            "dlq": false
+        },
+        "designer": {
+            "orphans": []
+        },
+        "zone": "eu1.integromat.com"
+    }
+}

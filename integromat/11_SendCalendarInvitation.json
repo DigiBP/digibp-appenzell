@@ -1,0 +1,419 @@
+{
+    "name": "Send Calendar Invitation",
+    "flow": [
+        {
+            "id": 2,
+            "module": "gateway:CustomWebHook",
+            "version": 1,
+            "parameters": {
+                "hook": 172877,
+                "maxResults": 2
+            },
+            "mapper": {},
+            "metadata": {
+                "designer": {
+                    "x": -628,
+                    "y": -12
+                },
+                "restore": {
+                    "hook": {
+                        "label": "send-calendar-invite"
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "hook",
+                        "type": "hook",
+                        "label": "Webhook",
+                        "required": true
+                    },
+                    {
+                        "name": "maxResults",
+                        "type": "number",
+                        "label": "Maximum number of results"
+                    }
+                ],
+                "interface": [
+                    {
+                        "name": "caseId",
+                        "type": "number"
+                    }
+                ]
+            }
+        },
+        {
+            "id": 4,
+            "module": "postgres:StoredProcedure",
+            "version": 2,
+            "parameters": {
+                "ignore": false,
+                "spname": "\"unemployment_service\".\"GetUserMail\"",
+                "account": 648539
+            },
+            "mapper": {
+                "@01:integer": "{{2.caseId}}"
+            },
+            "metadata": {
+                "designer": {
+                    "x": -327,
+                    "y": -5
+                },
+                "restore": {
+                    "spname": {
+                        "label": "unemployment_service.GetUserMail"
+                    },
+                    "account": {
+                        "label": "My PostgreSQL connection"
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "account",
+                        "type": "account",
+                        "label": "Connection",
+                        "required": true
+                    },
+                    {
+                        "name": "ignore",
+                        "type": "boolean",
+                        "label": "Ignore returned data",
+                        "required": true
+                    },
+                    {
+                        "name": "spname",
+                        "type": "select",
+                        "label": "Function",
+                        "required": true
+                    }
+                ],
+                "expect": [
+                    {
+                        "name": "@01:integer",
+                        "type": "integer",
+                        "label": "_id_case"
+                    }
+                ],
+                "interface": [
+                    {
+                        "name": "GetUserMail",
+                        "type": "text",
+                        "label": "GetUserMail"
+                    }
+                ]
+            }
+        },
+        {
+            "id": 3,
+            "module": "google-calendar:ActionCreateEvent",
+            "version": 4,
+            "parameters": {
+                "account": 651769
+            },
+            "mapper": {
+                "end": "{{setHour(addDays(now; 7); 11)}}",
+                "start": "{{setHour(addDays(now; 7); 10)}}",
+                "colorId": "",
+                "summary": "Introduction Meeting",
+                "location": "RAV Basel,Hochstrasse 37, 4002 Basel, Room 205",
+                "attendees": [
+                    {
+                        "email": "{{get(4.GetUserMail; \"email\")}}",
+                        "displayName": ""
+                    }
+                ],
+                "calendarId": "info.ravbasel@gmail.com",
+                "recurrence": [],
+                "visibility": "public",
+                "allDayEvent": false,
+                "description": "",
+                "transparency": "opaque",
+                "guestsCanModify": true,
+                "sendNotifications": true,
+                "remindersOverrides": []
+            },
+            "metadata": {
+                "designer": {
+                    "x": -29,
+                    "y": -6
+                },
+                "restore": {
+                    "account": {
+                        "label": "My Google connection (info.ravbasel@gmail.com)"
+                    },
+                    "colorId": {
+                        "mode": "chose",
+                        "label": ""
+                    },
+                    "attendees": {
+                        "mode": "chose",
+                        "items": [
+                            "undefined"
+                        ]
+                    },
+                    "reminders": {
+                        "mode": "chose"
+                    },
+                    "calendarId": {
+                        "mode": "chose",
+                        "label": "info.ravbasel@gmail.com"
+                    },
+                    "recurrence": {
+                        "items": []
+                    },
+                    "visibility": {
+                        "label": "Public"
+                    },
+                    "allDayEvent": {
+                        "mode": "chose"
+                    },
+                    "transparency": {
+                        "label": "Busy"
+                    },
+                    "remindersOverrides": {
+                        "items": []
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "account",
+                        "type": "account",
+                        "label": "Connection",
+                        "required": true
+                    }
+                ],
+                "expect": [
+                    {
+                        "name": "summary",
+                        "type": "text",
+                        "label": "Event name",
+                        "required": true,
+                        "multiline": true
+                    },
+                    {
+                        "name": "allDayEvent",
+                        "type": "boolean",
+                        "label": "All day event",
+                        "required": true
+                    },
+                    {
+                        "name": "start",
+                        "type": "date",
+                        "label": "Start date",
+                        "required": true
+                    },
+                    {
+                        "name": "end",
+                        "type": "date",
+                        "label": "End date",
+                        "required": true
+                    },
+                    {
+                        "name": "description",
+                        "type": "text",
+                        "label": "Description"
+                    },
+                    {
+                        "name": "location",
+                        "type": "text",
+                        "label": "Location"
+                    },
+                    {
+                        "name": "reminders",
+                        "type": "boolean",
+                        "label": "Use the default reminder settings for this event."
+                    },
+                    {
+                        "name": "remindersOverrides",
+                        "spec": [
+                            {
+                                "name": "method",
+                                "type": "select",
+                                "label": "Method",
+                                "options": [
+                                    {
+                                        "label": "Email",
+                                        "value": "email"
+                                    },
+                                    {
+                                        "label": "SMS",
+                                        "value": "sms"
+                                    },
+                                    {
+                                        "label": "Popup",
+                                        "value": "popup"
+                                    }
+                                ],
+                                "required": true
+                            },
+                            {
+                                "name": "minutes",
+                                "type": "uinteger",
+                                "label": "Minutes before event",
+                                "required": true,
+                                "validate": {
+                                    "max": 40320
+                                }
+                            }
+                        ],
+                        "type": "array",
+                        "label": "Reminders"
+                    },
+                    {
+                        "name": "attendees",
+                        "spec": [
+                            {
+                                "name": "displayName",
+                                "type": "text",
+                                "label": "Name"
+                            },
+                            {
+                                "name": "email",
+                                "type": "email",
+                                "label": "Email",
+                                "required": true
+                            }
+                        ],
+                        "type": "array",
+                        "label": "Attendees",
+                        "labels": {
+                            "add": "Add an attendee",
+                            "edit": "Edit an attendee",
+                            "field": "Attendee"
+                        }
+                    },
+                    {
+                        "name": "transparency",
+                        "type": "select",
+                        "label": "Show me as",
+                        "required": true,
+                        "validate": {
+                            "enum": [
+                                "opaque",
+                                "transparent"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "visibility",
+                        "type": "select",
+                        "label": "Visibility",
+                        "required": true,
+                        "validate": {
+                            "enum": [
+                                "default",
+                                "public",
+                                "private"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "sendNotifications",
+                        "type": "boolean",
+                        "label": "Send notifications about the creation of the new event",
+                        "required": true
+                    },
+                    {
+                        "name": "guestsCanModify",
+                        "type": "boolean",
+                        "label": "Guests can modify the event",
+                        "required": true
+                    },
+                    {
+                        "name": "recurrence",
+                        "type": "array",
+                        "label": "Recurrence"
+                    },
+                    {
+                        "name": "calendarId",
+                        "type": "select",
+                        "label": "Calendar",
+                        "required": true
+                    },
+                    {
+                        "name": "colorId",
+                        "type": "select",
+                        "label": "Color"
+                    }
+                ],
+                "advanced": true
+            }
+        },
+        {
+            "id": 5,
+            "module": "postgres:StoredProcedure",
+            "version": 2,
+            "parameters": {
+                "ignore": false,
+                "spname": "\"unemployment_service\".\"UpdateCaseStatus\"",
+                "account": 648539
+            },
+            "mapper": {
+                "@01:integer": "{{2.caseId}}",
+                "@02:character": "approved"
+            },
+            "metadata": {
+                "designer": {
+                    "x": 271,
+                    "y": -6
+                },
+                "restore": {
+                    "spname": {
+                        "label": "unemployment_service.UpdateCaseStatus"
+                    },
+                    "account": {
+                        "label": "My PostgreSQL connection"
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "account",
+                        "type": "account",
+                        "label": "Connection",
+                        "required": true
+                    },
+                    {
+                        "name": "ignore",
+                        "type": "boolean",
+                        "label": "Ignore returned data",
+                        "required": true
+                    },
+                    {
+                        "name": "spname",
+                        "type": "select",
+                        "label": "Function",
+                        "required": true
+                    }
+                ],
+                "expect": [
+                    {
+                        "name": "@01:integer",
+                        "type": "integer",
+                        "label": "_id_case"
+                    },
+                    {
+                        "name": "@02:character",
+                        "type": "text",
+                        "label": "_status"
+                    }
+                ],
+                "interface": []
+            }
+        }
+    ],
+    "metadata": {
+        "version": 1,
+        "scenario": {
+            "roundtrips": 1,
+            "maxErrors": 3,
+            "autoCommit": false,
+            "sequential": false,
+            "confidential": false,
+            "dataloss": false,
+            "dlq": false
+        },
+        "designer": {
+            "orphans": []
+        },
+        "zone": "eu1.integromat.com"
+    }
+}

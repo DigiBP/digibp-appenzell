@@ -1,0 +1,411 @@
+{
+    "name": "Send E-mail to Employer",
+    "flow": [
+        {
+            "id": 7,
+            "module": "gateway:CustomWebHook",
+            "version": 1,
+            "parameters": {
+                "hook": 160453,
+                "maxResults": 1
+            },
+            "mapper": {},
+            "metadata": {
+                "designer": {
+                    "x": -158,
+                    "y": 2
+                },
+                "restore": {
+                    "hook": {
+                        "label": "send-email-employer"
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "hook",
+                        "type": "hook",
+                        "label": "Webhook",
+                        "required": true
+                    },
+                    {
+                        "name": "maxResults",
+                        "type": "number",
+                        "label": "Maximum number of results"
+                    }
+                ],
+                "interface": [
+                    {
+                        "name": "id_case",
+                        "type": "number"
+                    }
+                ],
+                "advanced": true
+            }
+        },
+        {
+            "id": 16,
+            "module": "builtin:BasicRouter",
+            "version": 1,
+            "mapper": null,
+            "metadata": {
+                "designer": {
+                    "x": 92,
+                    "y": -4
+                }
+            },
+            "routes": [
+                {
+                    "flow": [
+                        {
+                            "id": 1,
+                            "module": "postgres:StoredProcedure",
+                            "version": 2,
+                            "parameters": {
+                                "ignore": false,
+                                "spname": "\"unemployment_service\".\"EmployerCheck\"",
+                                "account": 648539
+                            },
+                            "mapper": {
+                                "@01:integer": "{{7.id_case}}"
+                            },
+                            "metadata": {
+                                "designer": {
+                                    "x": 392,
+                                    "y": -154
+                                },
+                                "restore": {
+                                    "spname": {
+                                        "label": "unemployment_service.EmployerCheck"
+                                    },
+                                    "account": {
+                                        "label": "My PostgreSQL connection"
+                                    }
+                                },
+                                "parameters": [
+                                    {
+                                        "name": "account",
+                                        "type": "account",
+                                        "label": "Connection",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "ignore",
+                                        "type": "boolean",
+                                        "label": "Ignore returned data",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "spname",
+                                        "type": "select",
+                                        "label": "Function",
+                                        "required": true
+                                    }
+                                ],
+                                "expect": [
+                                    {
+                                        "name": "@01:integer",
+                                        "type": "integer",
+                                        "label": "_id_case"
+                                    }
+                                ],
+                                "interface": [
+                                    {
+                                        "name": "EmployerCheck",
+                                        "type": "text",
+                                        "label": "EmployerCheck"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "id": 14,
+                            "module": "google-email:ActionSendEmail",
+                            "version": 1,
+                            "parameters": {
+                                "account": 651769
+                            },
+                            "mapper": {
+                                "cc": [],
+                                "to": [
+                                    "{{get(1.EmployerCheck; \"emp_email\")}}"
+                                ],
+                                "bcc": [],
+                                "html": "Dear {{get(1.EmployerCheck; \"emp_name\")}},\n\n<br>\n\n<br>We received the unemployment registration from\nyour ex-employee.\n\n<br>Case ID: {{7.id_case}}\n\n<br>Employee Name: {{get(1.EmployerCheck; \"firstname\")}} \n{{get(1.EmployerCheck; \"lastname\")}}\n\n<br>AHV Nr: \n{{get(1.EmployerCheck; \"ahv_nr\")}}\n\n<br>To get more information we would request you to\nfill out the employer survey form, link as below.\n\n<br>https://docs.google.com/forms/d/e/1FAIpQLScSoo2s7sBEuugUp06xndNLR0cL0HVv74G_M59xn-dJP5pmag/viewform?usp=sf_link\n\n<br>\n\n<br>Thanks for your coordination.\n\n<br>Best Regards\n\n<br>\n\n<br>RAV Basel\n\n",
+                                "subject": "RAV Unemployment Survey {{7.id_case}} ",
+                                "attachments": []
+                            },
+                            "metadata": {
+                                "designer": {
+                                    "x": 600,
+                                    "y": 0
+                                },
+                                "restore": {
+                                    "cc": {
+                                        "mode": "chose",
+                                        "items": []
+                                    },
+                                    "to": {
+                                        "mode": "chose",
+                                        "items": [
+                                            "undefined"
+                                        ]
+                                    },
+                                    "bcc": {
+                                        "mode": "chose",
+                                        "items": []
+                                    },
+                                    "account": {
+                                        "label": "My Google connection (info.ravbasel@gmail.com)"
+                                    },
+                                    "attachments": {
+                                        "mode": "chose",
+                                        "items": []
+                                    }
+                                },
+                                "parameters": [
+                                    {
+                                        "name": "account",
+                                        "type": "account",
+                                        "label": "Connection",
+                                        "required": true
+                                    }
+                                ],
+                                "expect": [
+                                    {
+                                        "name": "to",
+                                        "spec": {
+                                            "name": " ",
+                                            "type": "email",
+                                            "label": "Email address",
+                                            "required": true
+                                        },
+                                        "type": "array",
+                                        "label": "To",
+                                        "labels": {
+                                            "add": "Add a recipient",
+                                            "edit": "Edit a recipient"
+                                        },
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "subject",
+                                        "type": "text",
+                                        "label": "Subject"
+                                    },
+                                    {
+                                        "name": "html",
+                                        "type": "text",
+                                        "label": "Content"
+                                    },
+                                    {
+                                        "name": "attachments",
+                                        "spec": [
+                                            {
+                                                "name": "fileName",
+                                                "type": "filename",
+                                                "label": "File name",
+                                                "required": true,
+                                                "semantic": "file:name"
+                                            },
+                                            {
+                                                "name": "data",
+                                                "type": "buffer",
+                                                "label": "Data",
+                                                "required": true,
+                                                "semantic": "file:data"
+                                            },
+                                            {
+                                                "name": "cid",
+                                                "type": "text",
+                                                "label": "Content-ID"
+                                            }
+                                        ],
+                                        "type": "array",
+                                        "label": "Attachments",
+                                        "labels": {
+                                            "add": "Add an attachment",
+                                            "edit": "Edit an attachment"
+                                        }
+                                    },
+                                    {
+                                        "name": "cc",
+                                        "spec": {
+                                            "type": "email",
+                                            "label": "Email address"
+                                        },
+                                        "type": "array",
+                                        "label": "Copy recipient",
+                                        "labels": {
+                                            "add": "Add a copy recipient",
+                                            "edit": "Edit a copy recipient"
+                                        }
+                                    },
+                                    {
+                                        "name": "bcc",
+                                        "spec": {
+                                            "type": "email",
+                                            "label": "Email address"
+                                        },
+                                        "type": "array",
+                                        "label": "Blind copy recipient",
+                                        "labels": {
+                                            "add": "Add a blind copy recipient",
+                                            "edit": "Edit a blind copy recipient"
+                                        }
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "id": 15,
+                            "module": "gateway:WebhookRespond",
+                            "version": 1,
+                            "parameters": {},
+                            "mapper": {
+                                "body": "{{7.id_case}}",
+                                "status": "200",
+                                "headers": []
+                            },
+                            "metadata": {
+                                "designer": {
+                                    "x": 900,
+                                    "y": 0
+                                },
+                                "restore": {
+                                    "headers": {
+                                        "items": []
+                                    }
+                                },
+                                "expect": [
+                                    {
+                                        "name": "status",
+                                        "type": "uinteger",
+                                        "label": "Status",
+                                        "required": true,
+                                        "validate": {
+                                            "min": 100
+                                        }
+                                    },
+                                    {
+                                        "name": "body",
+                                        "type": "any",
+                                        "label": "Body"
+                                    },
+                                    {
+                                        "name": "headers",
+                                        "spec": [
+                                            {
+                                                "name": "key",
+                                                "type": "text",
+                                                "label": "Key",
+                                                "required": true,
+                                                "validate": {
+                                                    "max": 256
+                                                }
+                                            },
+                                            {
+                                                "name": "value",
+                                                "type": "text",
+                                                "label": "Value",
+                                                "required": true,
+                                                "validate": {
+                                                    "max": 4096
+                                                }
+                                            }
+                                        ],
+                                        "type": "array",
+                                        "label": "Custom headers",
+                                        "validate": {
+                                            "maxItems": 16
+                                        }
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                },
+                {
+                    "flow": [
+                        {
+                            "id": 17,
+                            "module": "postgres:StoredProcedure",
+                            "version": 2,
+                            "parameters": {
+                                "ignore": false,
+                                "spname": "\"unemployment_service\".\"UpdateCaseStatus\"",
+                                "account": 648539
+                            },
+                            "mapper": {
+                                "@01:integer": "{{7.id_case}}",
+                                "@02:character": "pending (for employer info)"
+                            },
+                            "metadata": {
+                                "designer": {
+                                    "x": 392,
+                                    "y": 146
+                                },
+                                "restore": {
+                                    "spname": {
+                                        "label": "unemployment_service.UpdateCaseStatus"
+                                    },
+                                    "account": {
+                                        "label": "My PostgreSQL connection"
+                                    }
+                                },
+                                "parameters": [
+                                    {
+                                        "name": "account",
+                                        "type": "account",
+                                        "label": "Connection",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "ignore",
+                                        "type": "boolean",
+                                        "label": "Ignore returned data",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "spname",
+                                        "type": "select",
+                                        "label": "Function",
+                                        "required": true
+                                    }
+                                ],
+                                "expect": [
+                                    {
+                                        "name": "@01:integer",
+                                        "type": "integer",
+                                        "label": "_id_case"
+                                    },
+                                    {
+                                        "name": "@02:character",
+                                        "type": "text",
+                                        "label": "_status"
+                                    }
+                                ],
+                                "interface": []
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "metadata": {
+        "version": 1,
+        "scenario": {
+            "roundtrips": 1,
+            "maxErrors": 3,
+            "autoCommit": false,
+            "sequential": false,
+            "confidential": false,
+            "dataloss": false,
+            "dlq": false
+        },
+        "designer": {
+            "orphans": []
+        },
+        "zone": "eu1.integromat.com"
+    }
+}

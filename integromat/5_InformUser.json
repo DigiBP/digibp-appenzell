@@ -1,0 +1,572 @@
+{
+    "name": "Inform User",
+    "flow": [
+        {
+            "id": 1,
+            "module": "gateway:CustomWebHook",
+            "version": 1,
+            "parameters": {
+                "hook": 172837,
+                "maxResults": 2
+            },
+            "mapper": {},
+            "metadata": {
+                "designer": {
+                    "x": -545,
+                    "y": -14
+                },
+                "restore": {
+                    "hook": {
+                        "label": "inform-user"
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "hook",
+                        "type": "hook",
+                        "label": "Webhook",
+                        "required": true
+                    },
+                    {
+                        "name": "maxResults",
+                        "type": "number",
+                        "label": "Maximum number of results"
+                    }
+                ],
+                "interface": [
+                    {
+                        "name": "caseId",
+                        "type": "number"
+                    },
+                    {
+                        "name": "eligibility",
+                        "type": "boolean"
+                    }
+                ]
+            }
+        },
+        {
+            "id": 3,
+            "module": "postgres:StoredProcedure",
+            "version": 2,
+            "parameters": {
+                "ignore": false,
+                "spname": "\"unemployment_service\".\"GetUserMail\"",
+                "account": 648539
+            },
+            "mapper": {
+                "@01:integer": "{{1.caseId}}"
+            },
+            "metadata": {
+                "designer": {
+                    "x": -258,
+                    "y": -17
+                },
+                "restore": {
+                    "spname": {
+                        "label": "unemployment_service.GetUserMail"
+                    },
+                    "account": {
+                        "label": "My PostgreSQL connection"
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "account",
+                        "type": "account",
+                        "label": "Connection",
+                        "required": true
+                    },
+                    {
+                        "name": "ignore",
+                        "type": "boolean",
+                        "label": "Ignore returned data",
+                        "required": true
+                    },
+                    {
+                        "name": "spname",
+                        "type": "select",
+                        "label": "Function",
+                        "required": true
+                    }
+                ],
+                "expect": [
+                    {
+                        "name": "@01:integer",
+                        "type": "integer",
+                        "label": "_id_case"
+                    }
+                ],
+                "interface": [
+                    {
+                        "name": "GetUserMail",
+                        "type": "text",
+                        "label": "GetUserMail"
+                    }
+                ]
+            }
+        },
+        {
+            "id": 10,
+            "module": "builtin:BasicRouter",
+            "version": 1,
+            "mapper": null,
+            "metadata": {
+                "designer": {
+                    "x": 21,
+                    "y": -18
+                }
+            },
+            "routes": [
+                {
+                    "flow": [
+                        {
+                            "id": 2,
+                            "module": "google-email:ActionSendEmail",
+                            "version": 1,
+                            "parameters": {
+                                "account": 651769
+                            },
+                            "filter": {
+                                "name": "eligible",
+                                "conditions": [
+                                    [
+                                        {
+                                            "a": "{{1.eligibility}}",
+                                            "b": "true",
+                                            "o": "boolean:equal"
+                                        }
+                                    ]
+                                ]
+                            },
+                            "mapper": {
+                                "cc": [],
+                                "to": [
+                                    "{{get(3.GetUserMail; \"email\")}}"
+                                ],
+                                "bcc": [],
+                                "html": "Hello,<br>\nWe hereby inform you, that your application for unemployment benefits with the id {{1.caseId}} was accepted. A request form for additional information was sent to your former employer. As soon as we received all the relevant data, we will inform you about the next steps.<br><br>\n\nIf you have further questions, please contact us anytime.<br><br>\n\nBest regards,<br>\nRAV Basel",
+                                "subject": "[RAV-Basel] Application Status",
+                                "attachments": []
+                            },
+                            "metadata": {
+                                "designer": {
+                                    "x": 336,
+                                    "y": -167
+                                },
+                                "restore": {
+                                    "cc": {
+                                        "mode": "chose",
+                                        "items": []
+                                    },
+                                    "to": {
+                                        "mode": "chose",
+                                        "items": [
+                                            "undefined"
+                                        ]
+                                    },
+                                    "bcc": {
+                                        "mode": "chose",
+                                        "items": []
+                                    },
+                                    "account": {
+                                        "label": "My Google connection (info.ravbasel@gmail.com)"
+                                    },
+                                    "attachments": {
+                                        "mode": "chose",
+                                        "items": []
+                                    }
+                                },
+                                "parameters": [
+                                    {
+                                        "name": "account",
+                                        "type": "account",
+                                        "label": "Connection",
+                                        "required": true
+                                    }
+                                ],
+                                "expect": [
+                                    {
+                                        "name": "to",
+                                        "spec": {
+                                            "name": " ",
+                                            "type": "email",
+                                            "label": "Email address",
+                                            "required": true
+                                        },
+                                        "type": "array",
+                                        "label": "To",
+                                        "labels": {
+                                            "add": "Add a recipient",
+                                            "edit": "Edit a recipient"
+                                        },
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "subject",
+                                        "type": "text",
+                                        "label": "Subject"
+                                    },
+                                    {
+                                        "name": "html",
+                                        "type": "text",
+                                        "label": "Content"
+                                    },
+                                    {
+                                        "name": "attachments",
+                                        "spec": [
+                                            {
+                                                "name": "fileName",
+                                                "type": "filename",
+                                                "label": "File name",
+                                                "required": true,
+                                                "semantic": "file:name"
+                                            },
+                                            {
+                                                "name": "data",
+                                                "type": "buffer",
+                                                "label": "Data",
+                                                "required": true,
+                                                "semantic": "file:data"
+                                            },
+                                            {
+                                                "name": "cid",
+                                                "type": "text",
+                                                "label": "Content-ID"
+                                            }
+                                        ],
+                                        "type": "array",
+                                        "label": "Attachments",
+                                        "labels": {
+                                            "add": "Add an attachment",
+                                            "edit": "Edit an attachment"
+                                        }
+                                    },
+                                    {
+                                        "name": "cc",
+                                        "spec": {
+                                            "type": "email",
+                                            "label": "Email address"
+                                        },
+                                        "type": "array",
+                                        "label": "Copy recipient",
+                                        "labels": {
+                                            "add": "Add a copy recipient",
+                                            "edit": "Edit a copy recipient"
+                                        }
+                                    },
+                                    {
+                                        "name": "bcc",
+                                        "spec": {
+                                            "type": "email",
+                                            "label": "Email address"
+                                        },
+                                        "type": "array",
+                                        "label": "Blind copy recipient",
+                                        "labels": {
+                                            "add": "Add a blind copy recipient",
+                                            "edit": "Edit a blind copy recipient"
+                                        }
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "id": 7,
+                            "module": "postgres:StoredProcedure",
+                            "version": 2,
+                            "parameters": {
+                                "ignore": false,
+                                "spname": "\"unemployment_service\".\"UpdateCaseStatus\"",
+                                "account": 648539
+                            },
+                            "mapper": {
+                                "@01:integer": "{{1.caseId}}",
+                                "@02:character": "accepted"
+                            },
+                            "metadata": {
+                                "designer": {
+                                    "x": 649,
+                                    "y": -169
+                                },
+                                "restore": {
+                                    "spname": {
+                                        "label": "unemployment_service.UpdateCaseStatus"
+                                    },
+                                    "account": {
+                                        "label": "My PostgreSQL connection"
+                                    }
+                                },
+                                "parameters": [
+                                    {
+                                        "name": "account",
+                                        "type": "account",
+                                        "label": "Connection",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "ignore",
+                                        "type": "boolean",
+                                        "label": "Ignore returned data",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "spname",
+                                        "type": "select",
+                                        "label": "Function",
+                                        "required": true
+                                    }
+                                ],
+                                "expect": [
+                                    {
+                                        "name": "@01:integer",
+                                        "type": "integer",
+                                        "label": "_id_case"
+                                    },
+                                    {
+                                        "name": "@02:character",
+                                        "type": "text",
+                                        "label": "_status"
+                                    }
+                                ],
+                                "interface": []
+                            }
+                        }
+                    ]
+                },
+                {
+                    "flow": [
+                        {
+                            "id": 9,
+                            "module": "google-email:ActionSendEmail",
+                            "version": 1,
+                            "parameters": {
+                                "account": 651769
+                            },
+                            "filter": {
+                                "name": "not eligible",
+                                "conditions": [
+                                    [
+                                        {
+                                            "a": "{{1.eligibility}}",
+                                            "b": "false",
+                                            "o": "boolean:equal"
+                                        }
+                                    ]
+                                ]
+                            },
+                            "mapper": {
+                                "cc": [],
+                                "to": [
+                                    "{{get(3.GetUserMail; \"email\")}}"
+                                ],
+                                "bcc": [],
+                                "html": "Hello,<br>\nWe hereby inform you, that your application for unemployment benefits with the id {{1.caseId}} was rejected.<br><br>\n\nIf you have further questions, please contact us any time.<br><br>\nBest regards,<br>\nRAV Basel",
+                                "subject": "[RAV-Basel] Application Status",
+                                "attachments": []
+                            },
+                            "metadata": {
+                                "designer": {
+                                    "x": 336,
+                                    "y": 129
+                                },
+                                "restore": {
+                                    "cc": {
+                                        "mode": "chose",
+                                        "items": []
+                                    },
+                                    "to": {
+                                        "mode": "chose",
+                                        "items": [
+                                            "undefined"
+                                        ]
+                                    },
+                                    "bcc": {
+                                        "mode": "chose",
+                                        "items": []
+                                    },
+                                    "account": {
+                                        "label": "My Google connection (info.ravbasel@gmail.com)"
+                                    },
+                                    "attachments": {
+                                        "mode": "chose",
+                                        "items": []
+                                    }
+                                },
+                                "parameters": [
+                                    {
+                                        "name": "account",
+                                        "type": "account",
+                                        "label": "Connection",
+                                        "required": true
+                                    }
+                                ],
+                                "expect": [
+                                    {
+                                        "name": "to",
+                                        "spec": {
+                                            "name": " ",
+                                            "type": "email",
+                                            "label": "Email address",
+                                            "required": true
+                                        },
+                                        "type": "array",
+                                        "label": "To",
+                                        "labels": {
+                                            "add": "Add a recipient",
+                                            "edit": "Edit a recipient"
+                                        },
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "subject",
+                                        "type": "text",
+                                        "label": "Subject"
+                                    },
+                                    {
+                                        "name": "html",
+                                        "type": "text",
+                                        "label": "Content"
+                                    },
+                                    {
+                                        "name": "attachments",
+                                        "spec": [
+                                            {
+                                                "name": "fileName",
+                                                "type": "filename",
+                                                "label": "File name",
+                                                "required": true,
+                                                "semantic": "file:name"
+                                            },
+                                            {
+                                                "name": "data",
+                                                "type": "buffer",
+                                                "label": "Data",
+                                                "required": true,
+                                                "semantic": "file:data"
+                                            },
+                                            {
+                                                "name": "cid",
+                                                "type": "text",
+                                                "label": "Content-ID"
+                                            }
+                                        ],
+                                        "type": "array",
+                                        "label": "Attachments",
+                                        "labels": {
+                                            "add": "Add an attachment",
+                                            "edit": "Edit an attachment"
+                                        }
+                                    },
+                                    {
+                                        "name": "cc",
+                                        "spec": {
+                                            "type": "email",
+                                            "label": "Email address"
+                                        },
+                                        "type": "array",
+                                        "label": "Copy recipient",
+                                        "labels": {
+                                            "add": "Add a copy recipient",
+                                            "edit": "Edit a copy recipient"
+                                        }
+                                    },
+                                    {
+                                        "name": "bcc",
+                                        "spec": {
+                                            "type": "email",
+                                            "label": "Email address"
+                                        },
+                                        "type": "array",
+                                        "label": "Blind copy recipient",
+                                        "labels": {
+                                            "add": "Add a blind copy recipient",
+                                            "edit": "Edit a blind copy recipient"
+                                        }
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "id": 8,
+                            "module": "postgres:StoredProcedure",
+                            "version": 2,
+                            "parameters": {
+                                "ignore": false,
+                                "spname": "\"unemployment_service\".\"UpdateCaseStatus\"",
+                                "account": 648539
+                            },
+                            "mapper": {
+                                "@01:integer": "{{1.caseId}}",
+                                "@02:character": "rejected"
+                            },
+                            "metadata": {
+                                "designer": {
+                                    "x": 649,
+                                    "y": 131
+                                },
+                                "restore": {
+                                    "spname": {
+                                        "label": "unemployment_service.UpdateCaseStatus"
+                                    },
+                                    "account": {
+                                        "label": "My PostgreSQL connection"
+                                    }
+                                },
+                                "parameters": [
+                                    {
+                                        "name": "account",
+                                        "type": "account",
+                                        "label": "Connection",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "ignore",
+                                        "type": "boolean",
+                                        "label": "Ignore returned data",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "spname",
+                                        "type": "select",
+                                        "label": "Function",
+                                        "required": true
+                                    }
+                                ],
+                                "expect": [
+                                    {
+                                        "name": "@01:integer",
+                                        "type": "integer",
+                                        "label": "_id_case"
+                                    },
+                                    {
+                                        "name": "@02:character",
+                                        "type": "text",
+                                        "label": "_status"
+                                    }
+                                ],
+                                "interface": []
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "metadata": {
+        "version": 1,
+        "scenario": {
+            "roundtrips": 1,
+            "maxErrors": 3,
+            "autoCommit": false,
+            "sequential": false,
+            "confidential": false,
+            "dataloss": false,
+            "dlq": false
+        },
+        "designer": {
+            "orphans": []
+        },
+        "zone": "eu1.integromat.com"
+    }
+}
